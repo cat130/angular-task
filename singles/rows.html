@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <!--http://stackoverflow.com/questions/13743058/how-to-access-the-angular-scope-variable-in-browsers-console-->
+    <div ng-app='app'>
+        <div ng-controller='ctrl'>
+            <div class='row' ng-repeat='row in _.range(0,12)'>
+                <div id='{{row}}' ng-click="click($index)">
+                    <button>{{row}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="http://underscorejs.org/underscore-min.js"></script>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script>
+        var App = angular.module('app', []);
+
+        App.run(function ($rootScope) {
+            $rootScope._ = _;
+        });
+
+        App.controller('ctrl', function ($scope) {
+            $scope.click = function (idx) {
+                var elem = document.getElementById(idx);
+                console.log('clicked row', idx, elem);
+            };
+        });
+    </script>
+</body>
+</html>

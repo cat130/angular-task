@@ -1,4 +1,4 @@
 angular-task
 ============
 
-Modification example from http://todomvc.com/
+Modification of example from http://todomvc.com/

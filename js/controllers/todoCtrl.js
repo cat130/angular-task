@@ -5,9 +5,16 @@
  * - retrieves and persists the model via the todoStorage service
  * - exposes the model to the template and provides event handlers
  */
+
+
 angular.module('todomvc')
 	.controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoStorage) {
-		'use strict';
+	  'use strict';
+
+    var TODO_TYPE_must = 1, TODO_TYPE_should = 2, TODO_TYPE_could = 3;
+    function stateToDBValue(state) { if (state === 'should') return TODO_TYPE_should; else if (state === 'could') return TODO_TYPE_could; else return TODO_TYPE_must; }
+    function stateHumanValue(state) { if (state === TODO_TYPE_should) return 'should'; else if (state === TODO_TYPE_could) return 'could'; else return 'must'; }
+
 
 		var todos = $scope.todos = todoStorage.get();
 
@@ -15,7 +22,12 @@ angular.module('todomvc')
 		$scope.editedTodo = null;
 
 		$scope.$watch('todos', function (newValue, oldValue) {
-			$scope.remainingCount = $filter('filter')(todos, { completed: false }).length;
+		  if (!$scope.currentState) $scope.currentState = stateHumanValue(TODO_TYPE_must);
+		  $scope.mustCount = $filter('filter')(todos, { state: TODO_TYPE_must }).length;
+		  $scope.shouldCount = $filter('filter')(todos, { state: TODO_TYPE_should }).length;
+		  $scope.couldCount = $filter('filter')(todos, { state: TODO_TYPE_could }).length;
+
+		  $scope.remainingCount = $filter('filter')(todos, { completed: false }).length;
 			$scope.completedCount = todos.length - $scope.remainingCount;
 			$scope.allChecked = !$scope.remainingCount;
 			if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
@@ -25,11 +37,13 @@ angular.module('todomvc')
 
 		// Monitor the current route for changes and adjust the filter accordingly.
 		$scope.$on('$routeChangeSuccess', function () {
-			var status = $scope.status = $routeParams.status || '';
+		  var status = $scope.status = $routeParams.status || '';
+		  var currentState = stateToDBValue($routeParams.state);
+		  $scope.currentState = $routeParams.state;
 
 			$scope.statusFilter = (status === 'active') ?
-				{ completed: false } : (status === 'completed') ?
-				{ completed: true } : null;
+				{ completed: false, state: currentState } : (status === 'completed') ?
+				{ completed: true, state: currentState } : { state: currentState};
 		});
 
 		$scope.addTodo = function () {
@@ -40,7 +54,8 @@ angular.module('todomvc')
 
 			todos.push({
 				title: newTodo,
-				completed: false
+				completed: false,
+				state: stateToDBValue($scope.currentState)
 			});
 
 			$scope.newTodo = '';

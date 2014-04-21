@@ -1,0 +1,47 @@
+@import url('../bower_components/todomvc-common/base.css');
+
+#footer:before {
+	content: '';
+	position: absolute;
+	right: 0;
+	bottom: 31px;
+	left: 0;
+	height: 100px;
+	z-index: -1;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3),
+				0 6px 0 -3px rgba(255, 255, 255, 0.8),
+				0 7px 1px -3px rgba(0, 0, 0, 0.3),
+				0 83px 0 -6px rgba(255, 255, 255, 0.8),
+				0 84px 2px -6px rgba(0, 0, 0, 0.2);
+}
+
+.filters {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: absolute;
+    right: 0;
+    left: 0;
+}
+
+.filters li {
+	display: inline;
+}
+
+.filters li a {
+	color: #83756f;
+	margin: 2px;
+	text-decoration: none;
+}
+
+.filters li a.selected {
+	font-weight: bold;
+}
+
+#info {
+margin: 85px auto 0;
+color: #a6a6a6;
+font-size: 12px;
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+text-align: center;
+}

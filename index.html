@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<title>AngularJS • TodoMVC</title>
-		<link rel="stylesheet" href="bower_components/todomvc-common/base.css">
-		<style>[ng-cloak] { display: none; }</style>
+		<link href="css/base-ext.css" rel="stylesheet" />
+    <style>[ng-cloak] { display: none; }</style>
 	</head>
 	<body ng-app="todomvc">
 		<ng-view />
@@ -37,18 +37,30 @@
 					<span id="todo-count"><strong>{{remainingCount}}</strong>
 						<ng-pluralize count="remainingCount" when="{ one: 'item left', other: 'items left' }"></ng-pluralize>
 					</span>
-					<ul id="filters">
+					<ul class="filters">
 						<li>
-							<a ng-class="{selected: status == ''} " href="#/">All</a>
+							<a ng-class="{selected: status == ''}" href="#//{{currentState}}">All</a>
+						</li>   
+						<li>
+							<a ng-class="{selected: status == 'active'}" href="#/{{currentState}}/active">Active</a>
 						</li>
 						<li>
-							<a ng-class="{selected: status == 'active'}" href="#/active">Active</a>
-						</li>
-						<li>
-							<a ng-class="{selected: status == 'completed'}" href="#/completed">Completed</a>
+							<a ng-class="{selected: status == 'completed'}" href="#/{{currentState}}/completed">Completed</a>
 						</li>
 					</ul>
 					<button id="clear-completed" ng-click="clearCompletedTodos()" ng-show="completedCount">Clear completed ({{completedCount}})</button>
+                        <br/>
+                    <ul class="filters">
+						<li>
+							<a ng-class="{selected: currentState == 'must'} " ng-href="#/must/{{status}}">Must queues ({{mustCount}}) |</a>
+						</li>
+						<li>
+							<a ng-class="{selected: currentState == 'should'}" ng-href="#/should/{{status}}">Should queues ({{shouldCount}}) |</a> 
+						</li>
+						<li>
+							<a ng-class="{selected: currentState == 'could'}" ng-href="#/could/{{status}}">Could queues ({{couldCount}})</a>
+						</li>
+					</ul>
 				</footer>
 			</section>
 			<footer id="info">
@@ -62,6 +74,7 @@
 				<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
 			</footer>
 		</script>
+
 		<script src="bower_components/todomvc-common/base.js"></script>
 		<script src="bower_components/angular/angular.js"></script>
 		<script src="bower_components/angular-route/angular-route.js"></script>
